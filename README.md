@@ -5,7 +5,7 @@ ___
 
 ## Tablr
 
-Tablr is a fully customizeable open source Angular 2+ data datable. 
+Tablr is a fully customizable open source Angular 2+ data datable. 
 
 ## Features
 ###### An asterisk (*) denotes that a feature is an option.
