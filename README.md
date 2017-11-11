@@ -20,6 +20,7 @@ As of now, the table is absolutely positioned, and you must provide a top and le
 ## Options and Deafaults
 
 Each option is an ```@Input()``` for the ```<tablr></tablr>``` element.
+
 **Example:** ```<tablr [tablrTop]="'150px'" [fixedHeader]="true" </tablr>```
 
 |Option               |Default  |Data Type|Description                                                       |
