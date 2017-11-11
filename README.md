@@ -17,7 +17,7 @@ Tablr is a fully customizable open source Angular 2+ data datable.
 
 As of now, the table is absolutely positioned, and you must provide a top and left value or they will both default to '0px'. This will change in an update. 
 
-## Options and Deafaults
+## Options and Defaults
 
 Each option is an ```@Input()``` for the ```<tablr></tablr>``` element.
 
