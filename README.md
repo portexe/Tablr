@@ -1,28 +1,45 @@
 ![Tablr Logo](https://github.com/Zackazt/Tablr/blob/master/logo.png?raw=true)
+##### Written by Zack Wilson
+___
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.2.
 
-## Development server
+## Tablr
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Tablr is a fully customizeable open source Angular 2+ data datable. 
 
-## Code scaffolding
+## Features
+###### An asterisk (*) denotes that a feature is an option.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* Resizeable Columns
+* Fixed Headers *
+* Custom Styles *
+* Theming *
 
-## Build
+As of now, the table is absolutely positioned, and you must provide a top and left value or they will both default to '0px'. This will change in an update. 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## Options and Deafaults
 
-## Running unit tests
+Each option is an ```@Input()``` for the ```<tablr></tablr>``` element.
+**Example:** ```<tablr [tablrTop]="'150px'" [fixedHeader]="true" </tablr>```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+|Option               |Default  |Data Type|Description                                                       |
+|---------------------|---------|---------|------------------------------------------------------------------|
+|tablrTop             |'0px'    |String   |CSS top talue for Tablr element.
+|tablrLeft            |'0px'    |String   |CSS left value for Tablr element.
+|tablrWidth           |'500px'  |String   |CSS width value for Tablr element.
+|tablrHeight          |'350px'  |String   |CSS height value for Tablr element.
+|cellPadding          |'0'      |String   |CSS padding value for Tablr cells.
+|evenRowBgColor       |''       |String   |CSS background-color value for even Tablr rows.
+|oddRowBgColor        |''       |String   |CSS background-color value for odd Tablr rows.
+|headerBgColor        |''       |String   |CSS background-color value for Tablr header row.
+|alternatingRowColors |true     |Boolean  |If false, all row colors other than header will be the same.
+|columnBorderColor    |''       |String   |Color of the border that separates Tablr columns.
+|columnBorderWidth    |'1px'    |String   |Width of the border that separates Tablr columns.
+|fixedHeader          |false    |Boolean  |If true, the header will remain fixed when scrolling vertically.
+|fontSize             |'12px'   |String   |Font size of Tablr cell data.
+|headerFontSize       |'14px'   |String   |Font size of Tablr header data.
+|headerFontColor      |''       |String   |Font color of Tablr header data.
+|fontColor            |''       |String   |Font color of Tablr cell data.
 
-## Running end-to-end tests
+This project is currently still under development and is not yet ready for production. First production version will be 1.0.0.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
