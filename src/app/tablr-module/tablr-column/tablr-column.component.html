@@ -1,0 +1,31 @@
+<div *ngIf="data.visible === 'true'"
+	[attr.id]="data.index"
+	class="tablr-column"
+	[style.width]="tablrColumnWidth"
+	[class.tablr-last-column]="isFinalColumn"
+	[style.border-right-width]="columnBorderWidth"
+	[style.border-color]="columnBorderColor">
+	<div [style.background-color]="headerBgColor"
+		[style.padding]="cellPadding" 	
+		class="cell cell-header"
+		[style.margin-top]="scrollTop"
+		[style.font-size]="headerFontSize"
+		[style.color]="headerFontColor"
+		style="text-align: left; position: absolute; height: 30px;">
+		<b>{{data.label}}</b>
+	</div>
+	<div *ngFor="let row of rows"
+		[style.background-color]="oddRowBgColor"
+		[style.padding]="cellPadding"
+		[style.color]="fontColor"
+		class="cell"
+		[style.margin-top]="marginTop(row.index)"
+		[style.background-color]="bgColor(row.index % 2 === 0)">
+		{{row[data.key]}}
+	</div>
+	<div *ngIf="!isFinalColumn" 
+		[hidden]="isDraggingColumn" 
+		class="tablr-column-handle"
+		(mousedown)="click()">
+	</div>
+</div>
