@@ -33,6 +33,7 @@ export class TablrComponent implements OnInit, OnChanges {
     @Input() headerFontSize: string;
     @Input() headerFontColor: string;
     @Input() fontColor: string;
+    
     scrollTop: string = '0px';
 
     constructor() { }
@@ -82,12 +83,14 @@ export class TablrComponent implements OnInit, OnChanges {
         if (!this.fixedHeader) this.fixedHeader = false;
         if (!this.fontSize) this.fontSize = '12px';
         if (!this.headerFontSize) this.headerFontSize = '14px';
-        if(!this.headerFontColor) this.headerFontColor = '';
-        if(!this.fontColor) this.fontColor = '';
+        if (!this.headerFontColor) this.headerFontColor = '';
+        if (!this.fontColor) this.fontColor = '';
     }
     scrolling($event) {
         if (this.fixedHeader) {
             this.scrollTop = $event.target.scrollTop + 'px';
+        } else {
+            this.scrollTop = '0px';
         }
     }
     calculateFinalColumnWidth() {

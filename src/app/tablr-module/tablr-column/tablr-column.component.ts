@@ -26,6 +26,7 @@ export class TablrColumnComponent implements OnInit, OnChanges {
     @Input() fontSize: string;
     @Input() headerFontColor: string;
     @Input() fontColor: string;
+    @Input() fixedHeader: boolean;
     @Input() rows: any[];
 
     ngOnInit() {
