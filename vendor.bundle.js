@@ -3706,7 +3706,7 @@ TablrComponent = __decorate$1([
         styles: [`
       div{
       	overflow: hidden;
-      	overflow-y: auto;
+      	overflow-y: scroll;
       	padding: 0;
       	margin: 0;
       	position: absolute;
