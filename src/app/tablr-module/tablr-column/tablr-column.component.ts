@@ -23,6 +23,7 @@ export class TablrColumnComponent implements OnInit, OnChanges {
     @Input() columnBorderColor: string;
     @Input() columnBorderWidth: string;
     @Input() headerFontSize: string;
+    @Input() fontSize: string;
     @Input() headerFontColor: string;
     @Input() fontColor: string;
     @Input() rows: any[];
