@@ -2,15 +2,56 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 @Component({
     selector: 'tablr',
-    templateUrl: './tablr.component.html',
-    styleUrls: ['./tablr.component.css']
+    template: `<div [style.width]="tablrWidth"
+    [style.height]="tablrHeight"
+    (scroll)="scrolling($event)"
+    [style.left]="tablrLeft"
+    [style.top]="tablrTop"
+    #tablr
+    (mouseup)="doneDraggingColumn($event)"
+    (mousemove)="mouseDrag($event)"
+    (mouseleave)="doneDraggingColumn(null)">
+    <tablr-column [finalColumnWidth]="finalColumnWidth"
+                    [sortedHighlightColor]="sortedHighlightColor"
+                    [isDraggingColumn]="isDraggingColumn"
+                    [data]="column"
+                    (doneDragging)="doneDraggingColumn($event)"
+                    (initSort)="tablrSort($event)"
+                    (dragging)="draggingColumn($event)"
+                    *ngFor="let column of columns; let i = index; let last = last"
+                    [style.font-size]="fontSize"
+                    [isFinalColumn]="last"
+                    [tablrColumnWidth]="column.width"
+                    [scrollTop]="scrollTop"
+                    [cellPadding]="cellPadding"
+                    [evenRowBgColor]="evenRowBgColor"
+                    [oddRowBgColor]="oddRowBgColor"
+                    [headerBgColor]="headerBgColor"
+                    [alternatingRowColors]="alternatingRowColors"
+                    [columnBorderWidth]="columnBorderWidth"
+                    [columnBorderColor]="columnBorderColor"
+                    [headerFontSize]="headerFontSize"
+                    [headerFontColor]="headerFontColor"
+                    [fontColor]="fontColor"
+                    [rows]="rows"
+                    [fixedHeader]="fixedHeader">
+    </tablr-column>
+</div>`,
+    styles: [`div{
+        overflow: -moz-scrollbars-vertical;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    box-shadow: 1px 1px 2px black;
+}`]
 })
 export class TablrComponent implements OnInit, OnChanges {
 
     @Input() tableContent: any;
     @Input() columns: any[];
     @Input() rows: any[];
-
     isDraggingColumn: boolean = false;
     columnBeingDragged: any;
     finalColumnWidth: string;
@@ -33,10 +74,10 @@ export class TablrComponent implements OnInit, OnChanges {
     @Input() headerFontSize: string;
     @Input() headerFontColor: string;
     @Input() fontColor: string;
-    
-    scrollTop: string = '0px';
+    @Input() sortedHighlightColor: string;
 
-    constructor() { }
+    scrollTop: string = '0px';
+    columnKey: string = null;
 
     ngOnInit() {
         this.handleOptions();
@@ -56,9 +97,11 @@ export class TablrComponent implements OnInit, OnChanges {
         this.calculateFinalColumnWidth();
     }
     ngOnChanges() {
+        if (this.columnKey)
+            this.tablrSort(this.columnKey);
         this.addIndexToRows();
     }
-    addIndexToRows () {
+    addIndexToRows() {
         var index = 0;
         var newRows = [];
         for (let row of this.rows) {
@@ -67,6 +110,22 @@ export class TablrComponent implements OnInit, OnChanges {
             index++;
         }
         this.rows = newRows;
+    }
+    tablrSort(columnKey: string) {
+        this.columnKey = columnKey;
+        var sort_by = function(field: any, reverse: any, primer: any) {
+
+            let key: any = primer ?
+                function(x): any { return primer(x[field]); } :
+                function(x): any { return x[field]; };
+
+            reverse = !reverse ? 1 : -1;
+
+            return function(a: any, b: any): any {
+                return a = key(a), b = key(b), reverse * (+(a > b) - +(b > a));
+            };
+        };
+        this.rows.sort(sort_by(this.columnKey['key'], false, null));
     }
     handleOptions() {
         if (!this.tablrTop) this.tablrTop = '0px';
@@ -85,6 +144,7 @@ export class TablrComponent implements OnInit, OnChanges {
         if (!this.headerFontSize) this.headerFontSize = '14px';
         if (!this.headerFontColor) this.headerFontColor = '';
         if (!this.fontColor) this.fontColor = '';
+        if (!this.sortedHighlightColor) this.sortedHighlightColor = '#717a9b';
     }
     scrolling($event) {
         if (this.fixedHeader) {
@@ -111,7 +171,7 @@ export class TablrComponent implements OnInit, OnChanges {
             this.isDraggingColumn = false;
             return;
         } else {
-            this.finalColumnWidth = finalColumnWidth + 'px';;
+            this.finalColumnWidth = finalColumnWidth + 'px';
         }
     }
     mouseDrag($event) {

@@ -1,8 +1,0 @@
-div{
-	overflow: hidden;
-	overflow-y: scroll;
-	padding: 0;
-	margin: 0;
-	position: absolute;
-	box-shadow: 1px 1px 2px black;
-}
