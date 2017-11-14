@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'tablr',
-    template: `<div [style.width]="tablrWidth"
+    template: `
+<div [style.width]="tablrWidth"
     [style.height]="tablrHeight"
     (scroll)="scrolling($event)"
     [style.left]="tablrLeft"
@@ -37,8 +39,9 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
                     [fixedHeader]="fixedHeader">
     </tablr-column>
 </div>`,
-    styles: [`div{
-        overflow: -moz-scrollbars-vertical;
+    styles: [`
+div{
+    overflow: -moz-scrollbars-vertical;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0;

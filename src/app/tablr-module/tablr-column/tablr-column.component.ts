@@ -8,17 +8,16 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
     class="tablr-column"
     [style.width]="tablrColumnWidth"
     [class.tablr-last-column]="isFinalColumn"
-    [style.border-right-width]="columnBorderWidth"
-    [style.border-color]="columnBorderColor">
+    >
     <div [style.background-color]="headerBgColor"
         [style.pointer-events]="pointerEvents"
         [style.padding]="cellPadding"
         class="cell cell-header"
-        [style.margin-top]="scrollTop"
         [style.font-size]="headerFontSize"
         [style.color]="headerFontColor"
         (click)="tablrSort()"
-        style="text-align: left; position: absolute; height: 25px;">
+        [style.position]="headerPosition"
+        style="text-align: left; position: absolute; height: 25px; width: inherit;">
         <b>{{data.label}}</b>
     </div>
     <div *ngFor="let row of rows"
@@ -35,7 +34,9 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
         class="tablr-column-handle"
         (mousedown)="click()"
         (mouseup)="unClick()"
-        (click)="click()">
+        (click)="click()"
+        [style.border-left-width]="columnBorderWidth"
+    [style.border-color]="columnBorderColor">
     </div>
 </div>`,
     styles: [`
@@ -43,7 +44,6 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
     min-height: 100%;
     padding: 0;
     margin: 0;
-    border-right-style: solid;
     position: relative;
     float: left;
     box-sizing: border-box;
@@ -59,6 +59,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
     height: 100%;
     z-index: 9999 !important;
     top: 0;
+    border-left-style: solid;
 }
 .tablr-column-handle:hover{
     cursor: col-resize;
@@ -123,6 +124,8 @@ export class TablrColumnComponent implements OnInit, OnChanges {
     @Input() fixedHeader: boolean;
     @Input() rows: any[];
 
+    headerPosition: string;
+
     pointerEvents: string = 'auto';
     hightlighted: boolean = false;
 
@@ -132,6 +135,9 @@ export class TablrColumnComponent implements OnInit, OnChanges {
         } else if (this.isFinalColumn) {
             this.tablrColumnWidth = this.finalColumnWidth;
         }
+        if(this.fixedHeader)
+            this.headerPosition = 'fixed';
+        else this.headerPosition = 'absolute';
     }
     marginTop(index: number) {
         if (index === 0) {
