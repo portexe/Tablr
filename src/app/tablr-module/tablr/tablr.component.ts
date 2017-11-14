@@ -39,8 +39,8 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 </div>`,
     styles: [`div{
         overflow: -moz-scrollbars-vertical;
-    overflow-x: auto;
-    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 0;
     margin: 0;
     position: absolute;
