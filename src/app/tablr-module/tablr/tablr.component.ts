@@ -39,12 +39,11 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 </div>`,
     styles: [`div{
         overflow: -moz-scrollbars-vertical;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: scroll;
     padding: 0;
     margin: 0;
     position: absolute;
-    box-shadow: 1px 1px 2px black;
 }`]
 })
 export class TablrComponent implements OnInit, OnChanges {
