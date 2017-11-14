@@ -11,8 +11,7 @@ import * as _ from 'lodash';
     [style.top]="tablrTop"
     #tablr
     (mouseup)="doneDraggingColumn($event)"
-    (mousemove)="mouseDrag($event)"
-    (mouseleave)="doneDraggingColumn(null)">
+    (mousemove)="mouseDrag($event)">
     <tablr-column [finalColumnWidth]="finalColumnWidth"
                     [sortedHighlightColor]="sortedHighlightColor"
                     [isDraggingColumn]="isDraggingColumn"
