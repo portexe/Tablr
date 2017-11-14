@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import * as _ from 'lodash';
 
 @Component({
     selector: 'tablr',
