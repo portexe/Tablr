@@ -7,10 +7,8 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
     [attr.id]="data.index"
     class="tablr-column"
     [style.width]="tablrColumnWidth"
-    [class.tablr-last-column]="isFinalColumn"
-    >
+    [class.tablr-last-column]="isFinalColumn">
     <div [style.background-color]="headerBgColor"
-        [style.pointer-events]="pointerEvents"
         [style.padding]="cellPadding"
         class="cell cell-header"
         [style.font-size]="headerFontSize"
@@ -33,7 +31,6 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
         [hidden]="isDraggingColumn"
         class="tablr-column-handle"
         (mousedown)="click()"
-        (mouseup)="unClick()"
         (click)="click()"
         [style.border-left-width]="columnBorderWidth"
     [style.border-color]="columnBorderColor">
@@ -126,7 +123,7 @@ export class TablrColumnComponent implements OnInit, OnChanges {
 
     headerPosition: string;
 
-    pointerEvents: string = 'auto';
+    //pointerEvents: string = 'auto';
     hightlighted: boolean = false;
 
     ngOnInit() {
@@ -166,11 +163,11 @@ export class TablrColumnComponent implements OnInit, OnChanges {
     click() {
         if (this.isFinalColumn) return;
         this.isDraggingColumn = true;
-        this.pointerEvents = 'none';
+        //this.pointerEvents = 'none';
         this.dragging.emit({ 'columnData': this.data });
     }
     unClick() {
-        this.pointerEvents = 'auto';
+        //this.pointerEvents = 'auto';
     }
     tablrSort() {
         this.initSort.emit({ 'key': this.data.key });
