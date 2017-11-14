@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { TablrService } from '../tablr.service';
 
 @Component({
     selector: 'tablr',
@@ -12,7 +13,6 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
     (mouseup)="doneDraggingColumn($event)"
     (mousemove)="mouseDrag($event)">
     <tablr-column [finalColumnWidth]="finalColumnWidth"
-                    [sortedHighlightColor]="sortedHighlightColor"
                     [isDraggingColumn]="isDraggingColumn"
                     [data]="column"
                     (doneDragging)="doneDraggingColumn($event)"
@@ -74,10 +74,12 @@ export class TablrComponent implements OnInit, OnChanges {
     @Input() headerFontSize: string;
     @Input() headerFontColor: string;
     @Input() fontColor: string;
-    @Input() sortedHighlightColor: string;
 
     scrollTop: string = '0px';
     columnKey: string = null;
+    tableSortOptions: any;
+
+    constructor(private _tablrSvc: TablrService) { }
 
     ngOnInit() {
         this.handleOptions();
@@ -97,8 +99,8 @@ export class TablrComponent implements OnInit, OnChanges {
         this.calculateFinalColumnWidth();
     }
     ngOnChanges() {
-        if (this.columnKey)
-            this.tablrSort(this.columnKey);
+        if (this.tableSortOptions)
+            this.tablrSort(this.tableSortOptions);
         this.addIndexToRows();
     }
     addIndexToRows() {
@@ -111,8 +113,15 @@ export class TablrComponent implements OnInit, OnChanges {
         }
         this.rows = newRows;
     }
-    tablrSort(columnKey: string) {
-        this.columnKey = columnKey;
+    tablrSort($event: any) {
+        console.log($event, this.tableSortOptions);
+        this.tableSortOptions = $event;
+        var _reverse;
+        if ($event['sortOrder'] === -1) {
+            _reverse = true;
+        } else {
+            _reverse = false;
+        }
         var sort_by = function(field: any, reverse: any, primer: any) {
 
             let key: any = primer ?
@@ -125,7 +134,7 @@ export class TablrComponent implements OnInit, OnChanges {
                 return a = key(a), b = key(b), reverse * (+(a > b) - +(b > a));
             };
         };
-        this.rows.sort(sort_by(this.columnKey['key'], false, null));
+        this.rows.sort(sort_by(this.tableSortOptions['key'], _reverse, null));
     }
     handleOptions() {
         if (!this.tablrTop) this.tablrTop = '0px';
@@ -144,7 +153,6 @@ export class TablrComponent implements OnInit, OnChanges {
         if (!this.headerFontSize) this.headerFontSize = '14px';
         if (!this.headerFontColor) this.headerFontColor = '';
         if (!this.fontColor) this.fontColor = '';
-        if (!this.sortedHighlightColor) this.sortedHighlightColor = '#717a9b';
     }
     scrolling($event) {
         if (this.fixedHeader) {
@@ -184,10 +192,12 @@ export class TablrComponent implements OnInit, OnChanges {
         }
     }
     draggingColumn($event) {
+        this._tablrSvc.dragging(1);
         this.isDraggingColumn = true;
         this.columnBeingDragged = $event.columnData;
     }
     doneDraggingColumn($event) {
+        this._tablrSvc.dragging(0);
         this.isDraggingColumn = false;
     }
     readjustColumnWidth(newWidth: number) {

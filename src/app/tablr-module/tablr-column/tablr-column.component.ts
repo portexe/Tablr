@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { TablrService } from '../tablr.service';
 
 @Component({
     selector: 'tablr-column',
@@ -14,9 +15,13 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
         [style.font-size]="headerFontSize"
         [style.color]="headerFontColor"
         (click)="tablrSort()"
+        [style.pointer-events]="pointerEvents"
         [style.position]="headerPosition"
-        style="text-align: left; position: absolute; height: 25px; width: inherit;">
-        <b>{{data.label}}</b>
+        style="text-align: left; position: absolute; height: 25px; width: inherit; cursor: pointer;">
+            <i *ngIf="sortOrder === 0" class="fa fa-sort" aria-hidden="true" style="margin-right: 3px; marin-left: 2px;"></i>
+            <i *ngIf="sortOrder === 1" class="fa fa-sort-up" aria-hidden="true" style="margin-right: 3px; marin-left: 2px;"></i>
+            <i *ngIf="sortOrder === -1" class="fa fa-sort-down" aria-hidden="true" style="margin-right: 3px; marin-left: 2px;"></i>
+            <b>{{data.label}}</b>
     </div>
     <div *ngFor="let row of rows"
         [style.padding]="cellPadding"
@@ -122,17 +127,35 @@ export class TablrColumnComponent implements OnInit, OnChanges {
     @Input() rows: any[];
 
     headerPosition: string;
-
-    //pointerEvents: string = 'auto';
     hightlighted: boolean = false;
+    sortOrder: number = 0;
+    pointerEvents: string = 'auto';;
+
+    constructor(private _tablrSvc: TablrService) { }
 
     ngOnInit() {
+        var draggingObservable = this._tablrSvc.getDraggingObservable();
+        var sortObservable = this._tablrSvc.getSortObservable();
+        draggingObservable.subscribe(res => {
+            if (res === 0) {
+                this.pointerEvents = 'auto';
+            } else {
+                this.pointerEvents = 'none';
+            }
+        });
+        sortObservable.subscribe(res => {
+            if (res['key'] === this.data.key) {
+                this.sortOrder = res['sortOrder'];
+            } else {
+                this.sortOrder = 0;
+            }
+        });
         if (!this.tablrColumnWidth && !this.isFinalColumn) {
             this.tablrColumnWidth = '150px';
         } else if (this.isFinalColumn) {
             this.tablrColumnWidth = this.finalColumnWidth;
         }
-        if(this.fixedHeader)
+        if (this.fixedHeader)
             this.headerPosition = 'fixed';
         else this.headerPosition = 'absolute';
     }
@@ -163,14 +186,16 @@ export class TablrColumnComponent implements OnInit, OnChanges {
     click() {
         if (this.isFinalColumn) return;
         this.isDraggingColumn = true;
-        //this.pointerEvents = 'none';
         this.dragging.emit({ 'columnData': this.data });
     }
-    unClick() {
-        //this.pointerEvents = 'auto';
-    }
     tablrSort() {
-        this.initSort.emit({ 'key': this.data.key });
-        //this.hightlighted = true;
+        var _sortOrder;
+        if (this.sortOrder === 0) {
+            _sortOrder = 1;
+        } else {
+            _sortOrder = this.sortOrder * -1;
+        }
+        this._tablrSvc.updateSort(this.data.key, _sortOrder);
+        this.initSort.emit({ 'key': this.data.key, 'sortOrder': _sortOrder });
     }
 }
