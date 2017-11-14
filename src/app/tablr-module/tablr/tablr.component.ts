@@ -185,7 +185,7 @@ export class TablrComponent implements OnInit, OnChanges {
     mouseDrag($event) {
         var offsetX = $event.offsetX;
         if (this.isDraggingColumn) {
-            if (Number.parseInt($event.srcElement.id) !== this.columnBeingDragged.index) {
+            if (Number.parseInt($event.target.id) !== this.columnBeingDragged.index) {
                 offsetX = offsetX + Number.parseInt(this.columnBeingDragged.width);
             }
             this.readjustColumnWidth(offsetX);
