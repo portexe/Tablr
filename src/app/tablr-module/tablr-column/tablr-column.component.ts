@@ -57,7 +57,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
     right: 0;
     margin-right: -5.5px;
     height: 100%;
-    z-index: 9999 !important;
+    z-index: 99 !important;
     top: 0;
     border-left-style: solid;
 }
