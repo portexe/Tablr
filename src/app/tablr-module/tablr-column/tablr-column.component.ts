@@ -32,7 +32,7 @@ import 'rxjs/add/operator/takeUntil';
         class="cell"
         [style.font-size]="fontSize"
         [style.margin-top]="marginTop(row.index)"
-        [style.background-color]="bgColor(row.index % 2 === 0)">
+        [style.background-color]=row.bgColor>
         {{row[data.key]}}
     </div>
     <div *ngIf="!isFinalColumn"
@@ -133,6 +133,7 @@ export class TablrColumnComponent implements OnInit, OnChanges, OnDestroy {
     hightlighted: boolean = false;
     sortOrder: number = 0;
     pointerEvents: string = 'auto';
+    loaded: boolean = false;
     private draggingObservable: Observable<any>;
     private sortObservable: Observable<any>;
     private ngUnsubscribe: Subject<any> = new Subject();
@@ -177,22 +178,23 @@ export class TablrColumnComponent implements OnInit, OnChanges, OnDestroy {
             return '0px';
         }
     }
-    bgColor(isEven: boolean) {
-        if (isEven) {
-            return this.evenRowBgColor;
-        } else if (!isEven) {
-            return this.oddRowBgColor;
-        } else {
-            return this.oddRowBgColor;
+    bgColor() {
+        var newRows = [];
+        for (let row of this.rows) {
+            if (row.index % 2 === 0) {
+                row['bgColor'] = this.evenRowBgColor;
+            } else {
+                row['bgColor'] = this.oddRowBgColor;
+            }
+            newRows.push(row);
         }
+        this.rows = newRows;
     }
     ngOnChanges() {
         if (this.isFinalColumn) {
             this.tablrColumnWidth = this.finalColumnWidth;
         }
-        if (this.hightlighted) {
-            this.headerBgColor = this.sortedHighlightColor;
-        }
+        this.bgColor();
     }
     click() {
         if (this.isFinalColumn) return;
