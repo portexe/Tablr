@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
-
-
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class TablrService {
 
-	sortSubject: ReplaySubject<any>;
+	sortSubject: Subject<any>;
 	sortObservable: Observable<any>;
 
-	draggingSubject: ReplaySubject<any>;
+	draggingSubject: Subject<any>;
 	draggingObservable: Observable<any>;
 
 	constructor() {
-		this.sortSubject = <ReplaySubject<any>>new ReplaySubject();
+		this.sortSubject = new Subject();
 		this.sortObservable = this.sortSubject.asObservable();
-		this.draggingSubject = <ReplaySubject<any>>new ReplaySubject();
+		this.draggingSubject = new Subject();
 		this.draggingObservable = this.draggingSubject.asObservable();
 	}
 	getSortObservable() {

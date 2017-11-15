@@ -1,5 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { TablrService } from '../tablr.service';
+import { Observable } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
     selector: 'tablr-column',
@@ -100,7 +103,7 @@ import { TablrService } from '../tablr.service';
     border-right: none;
 }`]
 })
-export class TablrColumnComponent implements OnInit, OnChanges {
+export class TablrColumnComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() tablrColumnWidth: string;
     @Input() sortedHighlightColor: string;
@@ -129,21 +132,24 @@ export class TablrColumnComponent implements OnInit, OnChanges {
     headerPosition: string;
     hightlighted: boolean = false;
     sortOrder: number = 0;
-    pointerEvents: string = 'auto';;
+    pointerEvents: string = 'auto';
+    private draggingObservable: Observable<any>;
+    private sortObservable: Observable<any>;
+    private ngUnsubscribe: Subject<any> = new Subject();
 
     constructor(private _tablrSvc: TablrService) { }
 
     ngOnInit() {
-        var draggingObservable = this._tablrSvc.getDraggingObservable();
-        var sortObservable = this._tablrSvc.getSortObservable();
-        draggingObservable.subscribe(res => {
+        this.draggingObservable = this._tablrSvc.getDraggingObservable();
+        this.sortObservable = this._tablrSvc.getSortObservable();
+        this.draggingObservable.takeUntil(this.ngUnsubscribe).subscribe(res => {
             if (res === 0) {
                 this.pointerEvents = 'auto';
             } else {
                 this.pointerEvents = 'none';
             }
         });
-        sortObservable.subscribe(res => {
+        this.sortObservable.takeUntil(this.ngUnsubscribe).subscribe(res => {
             if (res['key'] === this.data.key) {
                 this.sortOrder = res['sortOrder'];
             } else {
@@ -158,6 +164,11 @@ export class TablrColumnComponent implements OnInit, OnChanges {
         if (this.fixedHeader)
             this.headerPosition = 'fixed';
         else this.headerPosition = 'absolute';
+    }
+    ngOnDestroy() {
+        this.sortOrder = 0;
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
     }
     marginTop(index: number) {
         if (index === 0) {

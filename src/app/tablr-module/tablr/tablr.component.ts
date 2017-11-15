@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { TablrService } from '../tablr.service';
 
 @Component({
@@ -47,7 +47,7 @@ div{
     position: absolute;
 }`]
 })
-export class TablrComponent implements OnInit, OnChanges {
+export class TablrComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() tableContent: any;
     @Input() columns: any[];
@@ -99,9 +99,13 @@ export class TablrComponent implements OnInit, OnChanges {
         this.calculateFinalColumnWidth();
     }
     ngOnChanges() {
-        if (this.tableSortOptions)
+        if (this.tableSortOptions) {
             this.tablrSort(this.tableSortOptions);
+        }
         this.addIndexToRows();
+    }
+    ngOnDestroy() {
+        this.tableSortOptions = null;
     }
     addIndexToRows() {
         var index = 0;
@@ -114,7 +118,6 @@ export class TablrComponent implements OnInit, OnChanges {
         this.rows = newRows;
     }
     tablrSort($event: any) {
-        console.log($event, this.tableSortOptions);
         this.tableSortOptions = $event;
         var _reverse;
         if ($event['sortOrder'] === -1) {
@@ -153,13 +156,6 @@ export class TablrComponent implements OnInit, OnChanges {
         if (!this.headerFontSize) this.headerFontSize = '14px';
         if (!this.headerFontColor) this.headerFontColor = '';
         if (!this.fontColor) this.fontColor = '';
-    }
-    scrolling($event) {
-        if (this.fixedHeader) {
-            this.scrollTop = $event.target.scrollTop + 'px';
-        } else {
-            this.scrollTop = '0px';
-        }
     }
     calculateFinalColumnWidth() {
         var totalWidthOfColumns = 0;
