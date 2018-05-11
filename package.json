@@ -44,7 +44,9 @@
     "ts-node": "~3.2.0",
     "tslint": "~5.3.2",
     "typescript": "~2.4.2",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "handlebars": "4.0.11",
+    "hoek": "5.0.3"
   },
   "dependencies": {}
 }
